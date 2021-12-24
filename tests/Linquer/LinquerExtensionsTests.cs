@@ -30,4 +30,24 @@ public class LinquerExtensionsTests
         people.Should().Contain(p => p.Id == 1 && p.Name == "John" && p.Surname == "Smith");
         people.Should().Contain(p => p.Id == 2 && p.Name == "Andrew" && p.Surname == "Sparrow");
     }
+
+    [Fact]
+    public async Task Inline_should_not_attempt_to_inline_known_function()
+    {
+        var dbContext = await ModelsContext.CreateDefaultAsync();
+
+        Expression<Func<Person, bool>> predicate = p => p.Name.Contains("n");
+        predicate = predicate.Inline();
+
+        var query = dbContext.People.Where(predicate);
+
+        var queryString = query.ToQueryString();
+        queryString.Should().Contain(@"instr(""p"".""Name"", 'n') > 0");
+
+        var people = await query.ToListAsync();
+
+        people.Should().HaveCount(2);
+        people.Should().Contain(p => p.Name == "John");
+        people.Should().Contain(p => p.Name == "Andrew");
+    }
 }
