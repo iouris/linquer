@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using System.Linq.Expressions;
 
-namespace Linquer.Internals
+namespace Linquer
 {
-    internal class ExpressionMethodCallRewriter : IExpressionMethodCallRewriter
+    public class DefaultExpressionMethodCallRewriter : IExpressionMethodCallRewriter
     {
-        public static readonly ExpressionMethodCallRewriter Instance = new ExpressionMethodCallRewriter();
+        public static readonly DefaultExpressionMethodCallRewriter Instance = new DefaultExpressionMethodCallRewriter();
 
         public Expression? TryRewrite(MethodCallExpression methodCallExpression, Expression[] arguments)
         {

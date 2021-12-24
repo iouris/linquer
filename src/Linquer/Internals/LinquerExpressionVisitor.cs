@@ -26,7 +26,7 @@ namespace Linquer.Internals
             public Expression? TryFindParameterValue(ParameterExpression parameter) =>
                 this.ParameterValueLookup.GetValueOrDefault(parameter) switch
                 {
-                    ParameterExpression anotherParameter => this.TryFindParameterValue(anotherParameter),
+                    ParameterExpression anotherParameter => this.TryFindParameterValue(anotherParameter) ?? anotherParameter,
                     var value => value
                 };
         }
@@ -36,26 +36,21 @@ namespace Linquer.Internals
 
         public LinquerExpressionVisitor(IExpressionMethodCallRewriter? expressionMethodCallRewriter)
         {
-            this.ExpressionMethodCallRewriter = expressionMethodCallRewriter ?? Internals.ExpressionMethodCallRewriter.Instance;
+            this.ExpressionMethodCallRewriter = expressionMethodCallRewriter ?? DefaultExpressionMethodCallRewriter.Instance;
         }
 
         protected override Expression VisitMethodCall(MethodCallExpression m)
         {
             var rewrittenArguments = m.Arguments.Select(arg => this.Visit(arg)).ToArray();
-            var substitute = this.ExpressionMethodCallRewriter.TryRewrite(m, rewrittenArguments);
+            var rewritten = this.ExpressionMethodCallRewriter.TryRewrite(m, rewrittenArguments);
 
-            var rewritten = substitute switch
+            var inlined = rewritten switch
             {
-                LambdaExpression lambda =>
-                    this.InlineLambda(lambda, rewrittenArguments),
-
-                Expression expression =>
-                    base.Visit(expression),
-
-                null =>
-                    base.VisitMethodCall(m)
+                LambdaExpression lambda => this.InlineLambda(lambda, rewrittenArguments),
+                Expression expression => base.Visit(expression),
+                null => base.VisitMethodCall(m)
             };
-            return rewritten;
+            return inlined;
         }
 
         protected override Expression VisitParameter(ParameterExpression p) =>
