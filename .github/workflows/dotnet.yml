@@ -22,9 +22,9 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test linquer/linquer/tests/Linquer.Tests.csproj --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
+      run: dotnet test $GITHUB_WORKSPACE/tests/Linquer.Tests.csproj --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
     - name: Publish coverage report to coveralls.io   
       uses: coverallsapp/github-action@master   
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }} 
-        path-to-lcov: linquer/linquer/tests/TestResults/coverage.info 
+        path-to-lcov: $GITHUB_WORKSPACE/tests/TestResults/coverage.info 
