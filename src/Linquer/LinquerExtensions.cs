@@ -7,7 +7,7 @@ namespace Linquer
     {
         public static Expression<TDelegate> Inline<TDelegate>(this Expression<TDelegate> predicate, IExpressionMethodCallRewriter? expressionMethodCallRewriter = null)
         {
-            var expressionVisitor = new LinquerExpressionVisitor(expressionMethodCallRewriter);
+            var expressionVisitor = new InliningExpressionVisitor(expressionMethodCallRewriter);
             var inlined = expressionVisitor.Visit(predicate);
             return (Expression<TDelegate>)inlined;
         }

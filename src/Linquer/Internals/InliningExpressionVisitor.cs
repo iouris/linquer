@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace Linquer.Internals
 {
-    internal class LinquerExpressionVisitor : ExpressionVisitor
+    internal class InliningExpressionVisitor : ExpressionVisitor
     {
         private class ExpressionsCallStack
         {
@@ -34,7 +34,7 @@ namespace Linquer.Internals
         private readonly IExpressionMethodCallRewriter ExpressionMethodCallRewriter;
         private readonly ExpressionsCallStack CallStack = new ExpressionsCallStack();
 
-        public LinquerExpressionVisitor(IExpressionMethodCallRewriter? expressionMethodCallRewriter)
+        public InliningExpressionVisitor(IExpressionMethodCallRewriter? expressionMethodCallRewriter)
         {
             this.ExpressionMethodCallRewriter = expressionMethodCallRewriter ?? DefaultExpressionMethodCallRewriter.Instance;
         }
