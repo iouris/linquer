@@ -36,13 +36,13 @@ public class LinquerExtensionsTests
     {
         var dbContext = await ModelsContext.CreateDefaultAsync();
 
-        Expression<Func<Person, bool>> predicate = p => p.Name.Contains("n");
+        Expression<Func<Person, bool>> predicate = p => !string.IsNullOrEmpty(p.Name);
         predicate = predicate.Inline();
 
         var query = dbContext.People.Where(predicate);
 
         var queryString = query.ToQueryString();
-        queryString.Should().Contain(@"instr(""p"".""Name"", 'n') > 0");
+        queryString.Should().Contain(@"WHERE ""p"".""Name"" <> ''");
 
         var people = await query.ToListAsync();
 
