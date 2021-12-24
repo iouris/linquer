@@ -7,7 +7,7 @@ namespace Linquer.Tests;
 
 using Models;
 
-public class InlineTests
+public class LinquerExtensionsTests
 {
     [Fact]
     public async Task Inline_applied_to_lambda_with_another_inner_lambda_in_its_body_should_inline_the_inner_lambda_and_lead_to_successful_query()
