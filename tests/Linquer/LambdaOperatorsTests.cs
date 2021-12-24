@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using System.Linq.Expressions;
 using Xunit;
 
 namespace Linquer.Tests;
@@ -7,16 +6,7 @@ namespace Linquer.Tests;
 public class LambdaOperatorsTests
 {
     [Theory]
-    [InlineData(false, false, false)]
-    [InlineData(false, true, false)]
-    [InlineData(true, false, false)]
-
-    [InlineData(false, null, false)]
-    [InlineData(true, null, true)]
-    [InlineData(null, false, false)]
-    [InlineData(null, true, true)]
-
-    [InlineData(null, null, null)]
+    [MemberData(nameof(AndOperatorArgumentsAndExpectedResults))]
     public void And_should_honour_nulls_and_return_expected_results(bool? leftValue, bool? rightValue, bool? expectedResult)
     {
         {
@@ -40,16 +30,7 @@ public class LambdaOperatorsTests
     }
 
     [Theory]
-    [InlineData(false, false, false)]
-    [InlineData(false, true, true)]
-    [InlineData(true, false, true)]
-
-    [InlineData(false, null, false)]
-    [InlineData(true, null, true)]
-    [InlineData(null, false, false)]
-    [InlineData(null, true, true)]
-
-    [InlineData(null, null, null)]
+    [MemberData(nameof(OrOperatorArgumentsAndExpectedResults))]
     public void Or_should_honour_nulls_and_return_expected_results(bool? leftValue, bool? rightValue, bool? expectedResult)
     {
         {
@@ -71,4 +52,17 @@ public class LambdaOperatorsTests
             andResult.Should().Be(expectedResult);
         }
     }
+
+    public static IEnumerable<object[]> AndOperatorArgumentsAndExpectedResults() =>
+        BoolOperatorArgumentsAndExpectedResults((left, right) => left && right);
+
+    public static IEnumerable<object[]> OrOperatorArgumentsAndExpectedResults() =>
+        BoolOperatorArgumentsAndExpectedResults((left, right) => left || right);
+
+    private static readonly bool?[] NullableBoolPermutations = new bool?[] { null, false, true };
+
+    private static IEnumerable<object[]> BoolOperatorArgumentsAndExpectedResults(Func<bool, bool, bool> op) =>
+        from left in NullableBoolPermutations
+        from right in NullableBoolPermutations
+        select new object[] { left, right, left == null ? right : right == null ? left : op(left.Value, right.Value) };
 }
