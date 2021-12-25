@@ -31,7 +31,7 @@ public class ModelsContext : DbContext
         var people = new Person[]
         {
             new() { Id = 1, Name = "John", Surname = "Smith", DateOfBirth = new(1990, 3, 15) },
-            new() { Id = 2, Name = "Andrew", Surname = "Sparrow", DateOfBirth = new(1995, 2, 10) },
+            new() { Id = 2, Name = "Andrew", Surname = "Sparrow", DateOfBirth = new(2011, 2, 10) },
         };
 
         dbContext.People.AddRange(people);

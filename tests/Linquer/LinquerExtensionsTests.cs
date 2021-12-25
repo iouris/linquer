@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
+using Linquer.Registrations;
+using Linquer.Tests.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Xunit;
-using System.Reflection;
-using Linquer.Tests.Models;
 
 namespace Linquer.Tests;
 
@@ -53,48 +53,38 @@ public class LinquerExtensionsTests
         people.Should().Contain(p => p.Name == "Andrew");
     }
 
-    private class CustomExpressionMethodCallRewriter : IExpressionMethodCallRewriter
+    private static IInlineableMethodsProvider CreateCustomExpressionsRegister()
     {
-        public static readonly IExpressionMethodCallRewriter Instance = new CustomExpressionMethodCallRewriter();
+        const int CurrentYear = 2021;
 
-        private const int CurrentYear = 2021;
-        private static readonly Expression<Func<Person, int>> AgeExpression = p => CurrentYear - p.DateOfBirth.Year;
-
-        public Expression? TryRewrite(MethodCallExpression methodCallExpression, Expression[] arguments)
-        {
-            var rewritten = DefaultExpressionMethodCallRewriter.Instance.TryRewrite(methodCallExpression, arguments);
-            if (rewritten != null)
-                return rewritten;
-
-            var method = methodCallExpression.Method;
-            if (method == InlineableFunctions.AgeMethod)
-                return AgeExpression;
-
-            return null;
-        }
+        var register = new InlineableMethodsRegister(ExpressionMethodCallRewriter.DefaultInlineableMethodsProvider);
+        register.Register((Person p) => p.Age(), p => CurrentYear - p.DateOfBirth.Year);
+        return register;
     }
 
-    private static class InlineableFunctions
-    {
-        public static int Age(Person _) =>
-            throw new NotSupportedException("it is not intended to be called.");
-
-        public static readonly MethodInfo AgeMethod = typeof(InlineableFunctions).GetMethod(nameof(Age))!;
-    }
+    private static readonly IExpressionMethodCallRewriter CustomExpressionMethodCallRewriter = new ExpressionMethodCallRewriter(
+        CreateCustomExpressionsRegister()
+    );
 
     [Fact]
     public async Task Inline_should_honour_custom_IExpressionMethodCallRewriter()
     {
         var dbContext = await ModelsContext.CreateDefaultAsync();
 
-        PersonPredicate atLeast30YearsOld = person => InlineableFunctions.Age(person) > 30;
-        atLeast30YearsOld = atLeast30YearsOld.Inline(CustomExpressionMethodCallRewriter.Instance);
+        PersonPredicate personIsAdult = person => person.Age() >= 18;
+        personIsAdult = personIsAdult.Inline(CustomExpressionMethodCallRewriter);
 
-        var query = dbContext.People.Where(atLeast30YearsOld);
+        var query = dbContext.People.Where(personIsAdult);
 
         var people = await query.ToListAsync();
 
         people.Should().HaveCount(1);
         people.Should().Contain(p => p.Name == "John" && p.Surname == "Smith");
     }
+}
+
+public static class InlineableFunctions
+{
+    public static int Age(this Person _) =>
+        throw new NotSupportedException("it is not intended to be called.");
 }

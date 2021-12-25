@@ -36,7 +36,7 @@ namespace Linquer.Internals
 
         public InliningExpressionVisitor(IExpressionMethodCallRewriter? expressionMethodCallRewriter)
         {
-            this.ExpressionMethodCallRewriter = expressionMethodCallRewriter ?? DefaultExpressionMethodCallRewriter.Instance;
+            this.ExpressionMethodCallRewriter = expressionMethodCallRewriter ?? Linquer.ExpressionMethodCallRewriter.Default;
         }
 
         protected override Expression VisitMethodCall(MethodCallExpression m)
