@@ -82,9 +82,3 @@ public class LinquerExtensionsTests
         people.Should().Contain(p => p.Name == "John" && p.Surname == "Smith");
     }
 }
-
-public static class InlineableFunctions
-{
-    public static int Age(this Person _) =>
-        throw new NotSupportedException("it is not intended to be called.");
-}
