@@ -118,4 +118,4 @@ var query = dbContext.People.Where(predicate);
 var people = query.ToList();
 ```
 
-A reminder that you need to apply the **Inline** to an expression before it can be passed to the **IQueryable.Where()** method. 
+Note the **Inline(CustomExpressionMethodCallRewriter)** call which 'inlines' the expression using our custom **IExpressionMethodCallRewriter** instance.
