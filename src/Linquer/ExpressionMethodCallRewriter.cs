@@ -1,7 +1,6 @@
 ﻿using Linquer.Internals;
 using Linquer.Registrations;
 using System;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -11,13 +10,8 @@ namespace Linquer
     {
         public static readonly IInlineableMethodsProvider DefaultInlineableMethodsProvider = Fun.Invoke(() =>
         {
-            static Expression createInvokeExpression(Expression[] args) =>
-                Expression.Invoke(args[0], args.Skip(1).ToArray());
-
             var register = new InlineableMethodsRegister();
-            register.Register(() => Invokes.Invoke<int, int>(default!, default), createInvokeExpression);
-            register.Register(() => Invokes.Invoke<int, int, int>(default!, default, default), createInvokeExpression);
-            register.Register(() => Invokes.Invoke<int, int, int, int>(default!, default, default, default), createInvokeExpression);
+            register.RegisterInlineableInvokes();
             return register;
         });
 

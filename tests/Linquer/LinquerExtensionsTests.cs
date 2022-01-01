@@ -55,10 +55,9 @@ public class LinquerExtensionsTests
 
     private static IInlineableMethodsProvider CreateCustomExpressionsRegister()
     {
-        const int CurrentYear = 2021;
-
         var register = new InlineableMethodsRegister(ExpressionMethodCallRewriter.DefaultInlineableMethodsProvider);
-        register.Register((Person p) => p.Age(), p => CurrentYear - p.DateOfBirth.Year);
+        register.Register(() => Dates.CurrentYear(), () => 2021);
+        register.Register((Person p) => p.Age(), p => Dates.CurrentYear() - p.DateOfBirth.Year);
         return register;
     }
 
@@ -71,7 +70,8 @@ public class LinquerExtensionsTests
     {
         var dbContext = await ModelsContext.CreateDefaultAsync();
 
-        PersonPredicate personIsAdult = person => person.Age() >= 18;
+        var adultAge = Expr.Create(() => 18);
+        PersonPredicate personIsAdult = person => person.Age() >= adultAge.Invoke();
         personIsAdult = personIsAdult.Inline(CustomExpressionMethodCallRewriter);
 
         var query = dbContext.People.Where(personIsAdult);

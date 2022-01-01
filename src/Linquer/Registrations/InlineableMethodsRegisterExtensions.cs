@@ -26,6 +26,13 @@ namespace Linquer.Registrations
         ) =>
             inlineableMethodsRegister.Register((LambdaExpression)inlineableMethodContainer, inlinedMethodFactory);
 
+        public static void Register<TRes>(
+            this IInlineableMethodsRegister inlineableMethodsRegister,
+            Expression<Func<TRes>> inlineableMethodContainer,
+            Expression<Func<TRes>> inlinedMethod
+        ) =>
+            inlineableMethodsRegister.Register(inlineableMethodContainer, _ => inlinedMethod);
+
         public static void Register<TArg1, TRes>(
             this IInlineableMethodsRegister inlineableMethodsRegister,
             Expression<Func<TArg1, TRes>> inlineableMethodContainer,
