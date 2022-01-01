@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace Linquer
 {
     public static class LambdaOperators
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static Expression<TDelegate>? CombineWith<TDelegate>(this Expression<TDelegate>? left, Expression<TDelegate>? right, Func<Expression<TDelegate>, Expression<TDelegate>, Expression<TDelegate>> combined) =>
             left == null ? right : right == null ? left : combined(left, right);
 
