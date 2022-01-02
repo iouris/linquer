@@ -1,0 +1,23 @@
+{
+  "profiles": {
+    "_build": {
+      "commandName": "Project"
+    },
+    "clean": {
+      "commandName": "Project",
+      "commandLineArgs": "clean"
+    },
+    "restore": {
+      "commandName": "Project",
+      "commandLineArgs": "restore"
+    },
+    "compile": {
+      "commandName": "Project",
+      "commandLineArgs": "compile"
+    },
+    "runUnitTests": {
+      "commandName": "Project",
+      "commandLineArgs": "runUnitTests"
+    }
+  }
+}
