@@ -18,7 +18,7 @@ using Nuke.Common.Tools.CoverallsNet;
 
 [GitHubActions(
     "ci",
-    GitHubActionsImage.Ubuntu1804,
+    GitHubActionsImage.MacOsLatest,
     //auto-generate /ci/ci.yml
     AutoGenerate = true,
     OnPushBranches = new[] { "main" },
