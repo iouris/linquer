@@ -20,7 +20,7 @@ using Nuke.Common.Tools.CoverallsNet;
     "ci",
     GitHubActionsImage.UbuntuLatest,
     //auto-generate /ci/ci.yml
-    AutoGenerate = true,
+    AutoGenerate = false,
     OnPushBranches = new[] { "main" },
     OnPullRequestBranches = new[] { "main" },
     
