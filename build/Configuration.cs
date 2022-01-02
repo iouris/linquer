@@ -1,8 +1,6 @@
 using Nuke.Common.Tooling;
 using System.ComponentModel;
 
-namespace Linquer.Build;
-
 [TypeConverter(typeof(TypeConverter<Configuration>))]
 public class Configuration : Enumeration
 {

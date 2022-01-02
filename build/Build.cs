@@ -13,8 +13,6 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using Nuke.Common.Tools.Coverlet;
 using Nuke.Common.Tools.CoverallsNet;
 
-namespace Linquer.Build;
-
 [CheckBuildProjectConfigurations]
 [ShutdownDotNetAfterServerBuild]
 
