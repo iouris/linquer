@@ -20,13 +20,13 @@ namespace Linquer.Build;
 
 [GitHubActions(
     "ci",
-    GitHubActionsImage.UbuntuLatest,
+    GitHubActionsImage.WindowsLatest,
     //auto-generate /ci/ci.yml
     AutoGenerate = true,
     OnPushBranches = new[] { "main" },
     OnPullRequestBranches = new[] { "main" },
     
-    InvokedTargets = new[] { nameof(RunUnitTests) },
+    InvokedTargets = new[] { nameof(PublishCoverageReport) },
     //will generate CI env command to set corresponding env vars to values imported from secrets, ie
     //TOKEN_1 = ${{ secrets.TOKEN_1 }}
     ImportSecrets = new[] { "GITHUB_TOKEN" }

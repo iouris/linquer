@@ -25,9 +25,9 @@ on:
       - main
 
 jobs:
-  ubuntu-latest:
-    name: ubuntu-latest
-    runs-on: ubuntu-latest
+  windows-latest:
+    name: windows-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v1
       - name: Cache .nuke/temp, ~/.nuget/packages
@@ -37,7 +37,7 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
-      - name: Run './build.cmd RunUnitTests'
-        run: ./build.cmd RunUnitTests
+      - name: Run './build.cmd PublishCoverageReport'
+        run: ./build.cmd PublishCoverageReport
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
