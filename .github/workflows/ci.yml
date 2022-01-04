@@ -31,6 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Run './build.cmd PublishCoverageReport'
-        run: ./build.cmd PublishCoverageReport
+        #run: ./build.cmd PublishCoverageReport
+        run: ./build.sh PublishCoverageReport
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
