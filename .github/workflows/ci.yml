@@ -29,9 +29,11 @@ jobs:
     name: ubuntu-latest
     runs-on: ubuntu-latest
     steps:
+      - name: ls
+        run: ls -a
+
       - uses: actions/checkout@v1
       - name: Run './build.cmd PublishCoverageReport'
-        #run: ./build.cmd PublishCoverageReport
-        run: ./build.sh PublishCoverageReport
+        run: ./build.cmd PublishCoverageReport
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
