@@ -115,12 +115,13 @@ public class Build : NukeBuild
         definition
         .DependsOn(RunUnitTests)
         .Executes(() =>
-            CoverallsNetTasks.CoverallsNet(s =>
-                s
+        {
+            var coverallsNetSettings =
+                new LatestCoverallsNetSettings { LCov = true }
                 .SetInput(LinquerTestResultsDirectory / "coverage.info")
-                //note that the variable gets set by the code line above:
-                //ImportSecrets = new[] { "GITHUB_TOKEN" }
-                .SetRepoTokenVariable("GITHUB_TOKEN")
-            )
-        );
+                .SetRepoTokenVariable("GITHUB_TOKEN");
+
+            var output = CoverallsNetTasks.CoverallsNet(coverallsNetSettings);
+            return output;
+        });
 }
