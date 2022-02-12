@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.CI.GitHubActions;
@@ -5,8 +7,11 @@ using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
+using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
+using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
@@ -15,7 +20,6 @@ using Nuke.Common.Tools.CoverallsNet;
 
 [CheckBuildProjectConfigurations]
 [ShutdownDotNetAfterServerBuild]
-
 [GitHubActions(
     "ci",
     GitHubActionsImage.UbuntuLatest,
@@ -23,7 +27,7 @@ using Nuke.Common.Tools.CoverallsNet;
     AutoGenerate = false,
     OnPushBranches = new[] { "main" },
     OnPullRequestBranches = new[] { "main" },
-    
+
     InvokedTargets = new[] { nameof(PublishCoverageReport) },
     //will generate CI env command to set corresponding env vars to values imported from secrets, ie
     //TOKEN_1 = ${{ secrets.TOKEN_1 }}
@@ -57,7 +61,7 @@ public class Build : NukeBuild
     private const string TestResultsDirectoryName = "TestResults";
     private static readonly AbsolutePath LinquerTestResultsDirectory = LinquerTestsProjectDirectory / TestResultsDirectoryName;
 
-    public Target Clean => definition => 
+    public Target Clean => definition =>
         definition
         .Executes(() =>
         {
@@ -66,12 +70,12 @@ public class Build : NukeBuild
             EnsureCleanDirectory(ArtifactsDirectory);
         });
 
-    public Target Restore => definition => 
+    public Target Restore => definition =>
         definition
         .DependsOn(Clean)
         .Executes(() =>
         {
-            DotNetRestore(s => 
+            DotNetRestore(s =>
                 s
                 .SetProjectFile(Solution)
             );
