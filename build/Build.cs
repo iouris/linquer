@@ -106,7 +106,7 @@ public class Build : NukeBuild
 
                 //unit tests code coverage
                 .EnableCollectCoverage()
-                .SetCoverletOutput(TestResultsDirectoryName + "/")
+                .SetCoverletOutput(LinquerTestResultsDirectory + "/")
                 .SetCoverletOutputFormat(CoverletOutputFormat.lcov)
             ); ;
         });

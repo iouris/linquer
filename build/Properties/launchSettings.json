@@ -19,6 +19,13 @@
       "commandName": "Project",
       "commandLineArgs": "runUnitTests"
     },
+    "publishCoverageReport": {
+      "commandName": "Project",
+      "commandLineArgs": "publishCoverageReport",
+      "environmentVariables": {
+        "GITHUB_TOKEN": "aa"
+      }
+    },
     "WSL": {
       "commandName": "WSL2",
       "environmentVariables": {},
