@@ -1,22 +1,17 @@
-using System;
-using System.Linq;
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Execution;
-using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
+using Nuke.Common.Tools.CoverallsNet;
+using Nuke.Common.Tools.Coverlet;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
-using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
-using Nuke.Common.Tools.Coverlet;
-using Nuke.Common.Tools.CoverallsNet;
 
 [CheckBuildProjectConfigurations]
 [ShutdownDotNetAfterServerBuild]
@@ -105,6 +100,7 @@ public class Build : NukeBuild
             DotNetTest(s =>
                 s
                 .SetProjectFile(Solution)
+                .SetConfiguration(Configuration)
                 .EnableNoBuild()
                 .SetVerbosity(DotNetVerbosity.Normal)
 
@@ -122,7 +118,7 @@ public class Build : NukeBuild
             CoverallsNetTasks.CoverallsNet(s =>
                 s
                 .SetInput(LinquerTestResultsDirectory / "coverage.info")
-                //note that the variable get set by the code line above:
+                //note that the variable gets set by the code line above:
                 //ImportSecrets = new[] { "GITHUB_TOKEN" }
                 .SetRepoTokenVariable("GITHUB_TOKEN")
             )
