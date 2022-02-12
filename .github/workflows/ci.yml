@@ -29,10 +29,14 @@ jobs:
     name: ubuntu-latest
     runs-on: ubuntu-latest
     steps:
-      - name: ls
-        run: ls -a
-
       - uses: actions/checkout@v1
+      - name: Cache .nuke/temp, ~/.nuget/packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            .nuke/temp
+            ~/.nuget/packages
+          key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
       - name: Run './build.cmd PublishCoverageReport'
         run: ./build.cmd PublishCoverageReport
         env:

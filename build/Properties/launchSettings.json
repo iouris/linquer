@@ -18,6 +18,11 @@
     "runUnitTests": {
       "commandName": "Project",
       "commandLineArgs": "runUnitTests"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "environmentVariables": {},
+      "distributionName": ""
     }
   }
 }
